@@ -1,0 +1,115 @@
+
+    <HTML>
+    <HEAD>
+    <TITLE>Cache options</TITLE>
+    <LINK rel="stylesheet" href="talk.css">
+    </HEAD>
+    <BODY bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#ff00ff">
+    <A HREF="slide13.htm">Previous</A> <A HREF="slide15.htm">Next</A>
+    <H2>Cache options</H2>
+    <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>buckets/bucketsize (13/1024)
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>Size of cache
+  </TD></TR></TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>pagesize (1024)
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>Aligns buckets to page boundaries for efficiency
+  </TD></TR></TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>strings (0)
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>Treat cache entries as strings, rather than references
+  </TD></TR></TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>read/write/delete (undef)
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>Code refs for fetching/updating the underlying data
+  </TD></TR></TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>context (undef)
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>Passed to the read/write/delete routines to provide context
+  
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>May be altered after <code>new()</code>
+  </TD></TR></TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>permissions (0777)
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>File creation permissions
+  </TD></TR></TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>cache_negative (0)
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>Whether to cache entries not found in underlying data
+  </TD></TR></TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>writethrough (1)
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>Whether to write underlying data as <code>write()</code> is called or when dirty entries are pushed out of the cache
+  </TD></TR></TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>expiry (0)
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>How long entries should stay in the cache in seconds
+  
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>0: Never expire
+  </TD></TR></TABLE>
+</TD></TR></TABLE>
+</TD></TR></TABLE>
+
+    <P><A HREF="slide13.htm">Previous</A> <A HREF="slide15.htm">Next</A>
+    </BODY>
+    </HTML>
+  

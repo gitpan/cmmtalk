@@ -1,0 +1,69 @@
+
+    <HTML>
+    <HEAD>
+    <TITLE>Usage</TITLE>
+    <LINK rel="stylesheet" href="talk.css">
+    </HEAD>
+    <BODY bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#ff00ff">
+    <A HREF="slide12.htm">Previous</A> <A HREF="slide14.htm">Next</A>
+    <H2>Usage</H2>
+    <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD><code>use Cache::Mmap;</code><BR><code>$cache=Cache::Mmap-&gt;new($filename,\%options);</code>
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>Loads the module and binds to <code>$filename</code>, creating if it doesn't exist
+  </TD></TR></TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD><code>($found,$value1)=$cache-&gt;read($key1);</code>
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>Fetch value from cache with key <code>$key1</code>
+  
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD><code>$found</code> is true if item found in cache or underlying data
+  </TD></TR></TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD><code>$cache-&gt;write($key2,$value2);</code>
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>Update/insert value into cache with key <code>$key2</code>.
+  
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>Update underlying data if appropriate options set
+  </TD></TR></TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD><code>$cache-&gt;delete($key3);</code>
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>Delete cache entry <code>$key3</code> from cache.
+  
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>Update underlying data if appropriate options set
+  </TD></TR></TABLE>
+</TD></TR></TABLE>
+</TD></TR></TABLE>
+
+    <P><A HREF="slide12.htm">Previous</A> <A HREF="slide14.htm">Next</A>
+    </BODY>
+    </HTML>
+  

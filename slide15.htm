@@ -1,0 +1,21 @@
+
+    <HTML>
+    <HEAD>
+    <TITLE>Typical creation</TITLE>
+    <LINK rel="stylesheet" href="talk.css">
+    </HEAD>
+    <BODY bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#ff00ff">
+    <A HREF="slide14.htm">Previous</A> <A HREF="slide16.htm">Next</A>
+    <H2>Typical creation</H2>
+    <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD><code>$cache=Cache::Mmap-&gt;new($filename,{</code><BR><code>&nbsp;&nbsp;buckets&nbsp;=&gt;&nbsp;23,</code><BR><code>&nbsp;&nbsp;bucketsize&nbsp;=&gt;&nbsp;4096,</code><BR><code>&nbsp;&nbsp;context&nbsp;=&gt;&nbsp;$dbh,</code><BR><code>&nbsp;&nbsp;cache_negative&nbsp;=&gt;&nbsp;1,</code><BR><code>&nbsp;&nbsp;read&nbsp;=&gt;&nbsp;sub{</code><BR><code>&nbsp;&nbsp;&nbsp;&nbsp;my($key,$dbh)=@_;</code><BR><code>&nbsp;&nbsp;&nbsp;&nbsp;my&nbsp;$r=$dbh-&gt;selectall_arrayref('select&nbsp;*&nbsp;from&nbsp;table1&nbsp;where&nbsp;key=?',{},$key);</code><BR><code>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(scalar(@$r),$r-&gt;[0]);</code><BR><code>&nbsp;&nbsp;},</code><BR><code>&nbsp;&nbsp;expiry&nbsp;=&gt;&nbsp;86400,</code><BR><code>);</code>
+  </TD></TR></TABLE>
+</TD></TR></TABLE>
+
+    <P><A HREF="slide14.htm">Previous</A> <A HREF="slide16.htm">Next</A>
+    </BODY>
+    </HTML>
+  

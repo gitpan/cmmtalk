@@ -1,0 +1,179 @@
+Why and How to use Cache::Mmap
+. Peter Haworth
+. pmh@cpan.org
+.
+. yapc::Europe
+. 23rd September, 2000
+
+What you need caching for
+. Storing results of long operations, such as complex database results
+. Saves wallclock- and CPU- time because values only worked out once
+. Allows access to values, even if underlying data unavailable
+  ## This is less realistic, but may be useful
+
+What you need shared caching for
+. Process farm like Apache
+. . Subsequent accesses requiring same data may be served by different processes, making non-shared cache less useful
+. . If not shared, each process caches separately, using more memory/disk
+. Several different processes requiring access to same data
+. IOPP Electronic Journals has both of these
+  # passwords fetched from database
+  # IPs/hostnames fetched from database
+  # subscriptions fetched from database
+
+Other shared caches - files
+  # Comparisons based on impressions gathered at start of project
+  # May be wrong, so I hope I don't offend the authors
+. Tie::FileLRUCache
+. + <code>tie()</code> interface
+. - One file per entry
+. - No max size
+    ## Either fill the disk, or add logic for deleting cache entries
+. - Lots of files must be opened/locked/read for each access
+    ## Inefficient
+. - Not transparent
+    ## Application must handle loading and refreshing the cache
+. File::Cache
+. + Max size can be specified
+. - Not transparent
+. - Many files per cache
+
+Other shared caches - shared memory
+. IPC::Cache
+. - No max size
+. - Not transparent
+. - Uses shared memory
+. . . OS limit on amount of shm in use, and segment size
+. . . shm segments have 32 bit integer ids
+      ## not mnemonic, plus new segments created by IPC::Cache as necessary,
+      ##   with next available shm id
+      ## could clash with any other app's shm segments
+. . . shm locking survives process death
+      ## bad apps could accidentally leave segments locked, preventing access
+. IPC::SharedCache
+. + Tied hash interface
+. + Transparent (read only)
+    ## These two together make the interface very simple
+. + Max size can be specified
+. - Uses shared memory
+    ## Therefore, inherently bad
+
+Other shared caches - miscellaneous
+. layer over DBM
+  ## create a module which stores cache entries in a DBM file
+. - Concurrent access not possible
+    ## Would need to add logic to handle locking
+. - Not transparent
+. layer over DBI
+  ## create a module which stores cache entries in a database
+. + Cached data easily usable by other processes
+. - Not transparent
+. - Database speed is usually what we're trying to overcome
+
+Benefits of Cache::Mmap
++ Uses standard files mmap()'d into process memory space
+. . only ever one file opened per cache
+. . max size always specified
+. . possible size only limited by disk space and VM size
+. . file split into "buckets", which are locked individually
+    ## Buckets are ordered by time of last access, so most frequently
+    ## accessed entries should move to the front, making things faster
++ Allows concurrent access (to different buckets)
++ Locks automatically removed by OS if process dies prematurely
+## Remaining benefits are explained in a leter slide
++ Transparent (read, write, delete)
++ Write-through or write when necessary
++ Can cache complex data structures (using Storable) or plain strings
+  ## Choosing plain string storage cuts down space used
++ User-definable filenames (cf IPC::Cache, File::Cache)
+  ## You have complete freedom for cache file naming, so there's very
+  ## little chance of clashing with another application
+
+Usage
+. <code>use Cache::Mmap;</code><BR><code>$cache=Cache::Mmap-&gt;new($filename,\%options);</code>
+. . Loads the module and binds to <code>$filename</code>, creating if it doesn't exist
+    ## Possible options are described on the next slide
+. <code>($found,$value1)=$cache-&gt;read($key1);</code>
+. . Fetch value from cache with key <code>$key1</code>
+    ## If not present in cache, value is fetched from original source,
+    ## and added to cache
+. . <code>$found</code> is true if item found in cache or underlying data
+. <code>$cache-&gt;write($key2,$value2);</code>
+. . Update/insert value into cache with key <code>$key2</code>.
+. . Update underlying data if appropriate options set
+. <code>$cache-&gt;delete($key3);</code>
+. . Delete cache entry <code>$key3</code> from cache.
+. . Update underlying data if appropriate options set
+
+Cache options
+## Things in parens are defaults
+. buckets/bucketsize (13/1024)
+. . Size of cache
+    ## More buckets needed for frequently accessed cache to reduce contention
+    ## Large buckets needed for large entries
+. pagesize (1024)
+. . Aligns buckets to page boundaries for efficiency
+    ## Setting pagesize equal to OS's VM page size should help a lot
+. strings (0)
+. . Treat cache entries as strings, rather than references
+    ## Strings use less space and are quicker, since no marshalling
+. read/write/delete (undef)
+. . Code refs for fetching/updating the underlying data
+. context (undef)
+. . Passed to the read/write/delete routines to provide context
+    ## Typically a database handle.
+. . May be altered after <code>new()</code>
+. permissions (0777)
+. . File creation permissions
+. cache_negative (0)
+. . Whether to cache entries not found in underlying data
+. writethrough (1)
+. . Whether to write underlying data as <code>write()</code> is called or when dirty entries are pushed out of the cache
+    ## Writethrough keeps underlying data in sync with cache
+    ## Non-writethrough may improve performance
+. expiry (0)
+. . How long entries should stay in the cache in seconds
+. . 0: Never expire
+
+Typical creation
+. <code>$cache=Cache::Mmap-&gt;new($filename,{</code><BR><code>&nbsp;&nbsp;buckets&nbsp;=&gt;&nbsp;23,</code><BR><code>&nbsp;&nbsp;bucketsize&nbsp;=&gt;&nbsp;4096,</code><BR><code>&nbsp;&nbsp;context&nbsp;=&gt;&nbsp;$dbh,</code><BR><code>&nbsp;&nbsp;cache_negative&nbsp;=&gt;&nbsp;1,</code><BR><code>&nbsp;&nbsp;read&nbsp;=&gt;&nbsp;sub{</code><BR><code>&nbsp;&nbsp;&nbsp;&nbsp;my($key,$dbh)=@_;</code><BR><code>&nbsp;&nbsp;&nbsp;&nbsp;my&nbsp;$r=$dbh-&gt;selectall_arrayref('select&nbsp;*&nbsp;from&nbsp;table1&nbsp;where&nbsp;key=?',{},$key);</code><BR><code>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(scalar(@$r),$r-&gt;[0]);</code><BR><code>&nbsp;&nbsp;},</code><BR><code>&nbsp;&nbsp;expiry&nbsp;=&gt;&nbsp;86400,</code><BR><code>);</code>
+  ## More, bigger buckets for more frequently accessed bigger entries
+  ## Database handle for context
+  ## Cache negative fetches, so they only get looked up once
+  ## Read requested row from db, returns $found=number or rows (0 or 1)
+  ##				$value=row arrayref
+  ## Expire entries after 24 hours
+
+Downsides
+  ## Here's where I hand-wave all the problems away,
+  ## and claim they don't matter
+- <code>fcntl()</code> locking not portable
+. . may not exist at all
+. . . not very likely
+      ## What kind of Unix doesn't have file locking?
+. . <code>struct flock</code> may be specified differently on different OSes
+    ## Using pack() to generate struct flocks is dangerous
+. . . will be moved to XS very soon
+      ## When this happens, the mmap() will probably also move to XS
+      ## to remove the Mmap.pm requirement
+- only works between processes on the same machine
+. . not a significant problem
+    ## Distributing a single cache is a hideous nightmare
+    ## Much easier and safer to put independent caches on each machine
+- not thread-safe
+  ## Possible to fix,
+  ## providing cache objects are not created independently by different threads
+
+Future enhancements
+. reporting of hit/miss ratio
+. . useful for cache sizing
+. <code>tie()</code> interface
+  ## no enumeration of keys/values, due to LRU organization and concurrency
+  ## Could provide a keys() method to loop through
+
+Resources
+. Get the module: <code>$CPAN/authors/id/P/PM/PMH/Cache-Mmap-0.01.tar.gz</code>
+. These slides: <code>$CPAN/authors/id/P/PM/PMH/cmmtalk-ye2000.tar.gz</code>
+. My email address: <code>pmh@cpan.org</code>
+. Electronic Journals: <code>http://www.iop.org/EJ/</code>
+

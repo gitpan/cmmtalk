@@ -1,0 +1,12 @@
+$cache=Cache::Mmap->new($filename,{
+  buckets => 23,
+  bucketsize => 4096,
+  context => $dbh,
+  cache_negative => 1,
+  read => sub{
+    my($key,$dbh)=@_;
+    my $r=$dbh->selectall_arrayref('select * from table1 where key=?',{},$key);
+    return (scalar(@$r),$r->[0]);
+  },
+  expiry => 86400,
+);

@@ -1,0 +1,57 @@
+
+    <HTML>
+    <HEAD>
+    <TITLE>Downsides</TITLE>
+    <LINK rel="stylesheet" href="talk.css">
+    </HEAD>
+    <BODY bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#ff00ff">
+    <A HREF="slide15.htm">Previous</A> <A HREF="slide17.htm">Next</A>
+    <H2>Downsides</H2>
+    <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="cross.gif" alt="-"></TD>
+      <TD><code>fcntl()</code> locking not portable
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>may not exist at all
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>not very likely
+  </TD></TR></TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD><code>struct flock</code> may be specified differently on different OSes
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>will be moved to XS very soon
+  </TD></TR></TABLE>
+</TD></TR></TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="cross.gif" alt="-"></TD>
+      <TD>only works between processes on the same machine
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>not a significant problem
+  </TD></TR></TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="cross.gif" alt="-"></TD>
+      <TD>not thread-safe
+  </TD></TR></TABLE>
+</TD></TR></TABLE>
+
+    <P><A HREF="slide15.htm">Previous</A> <A HREF="slide17.htm">Next</A>
+    </BODY>
+    </HTML>
+  

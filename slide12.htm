@@ -1,0 +1,63 @@
+
+    <HTML>
+    <HEAD>
+    <TITLE>Benefits of Cache::Mmap</TITLE>
+    <LINK rel="stylesheet" href="talk.css">
+    </HEAD>
+    <BODY bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#ff00ff">
+    <A HREF="slide11.htm">Previous</A> <A HREF="slide13.htm">Next</A>
+    <H2>Benefits of Cache::Mmap</H2>
+    <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="tick.gif" alt="+"></TD>
+      <TD>Uses standard files mmap()'d into process memory space
+  <TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>only ever one file opened per cache
+  
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>max size always specified
+  
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>possible size only limited by disk space and VM size
+  
+    <TR valign=top align=left>
+      <TD><IMG src="dot.gif" alt="."></TD>
+      <TD>file split into "buckets", which are locked individually
+  </TD></TR></TABLE>
+
+    <TR valign=top align=left>
+      <TD><IMG src="tick.gif" alt="+"></TD>
+      <TD>Allows concurrent access (to different buckets)
+  
+    <TR valign=top align=left>
+      <TD><IMG src="tick.gif" alt="+"></TD>
+      <TD>Locks automatically removed by OS if process dies prematurely
+  
+    <TR valign=top align=left>
+      <TD><IMG src="tick.gif" alt="+"></TD>
+      <TD>Transparent (read, write, delete)
+  
+    <TR valign=top align=left>
+      <TD><IMG src="tick.gif" alt="+"></TD>
+      <TD>Write-through or write when necessary
+  
+    <TR valign=top align=left>
+      <TD><IMG src="tick.gif" alt="+"></TD>
+      <TD>Can cache complex data structures (using Storable) or plain strings
+  
+    <TR valign=top align=left>
+      <TD><IMG src="tick.gif" alt="+"></TD>
+      <TD>User-definable filenames (cf IPC::Cache, File::Cache)
+  </TD></TR></TABLE>
+</TD></TR></TABLE>
+
+    <P><A HREF="slide11.htm">Previous</A> <A HREF="slide13.htm">Next</A>
+    </BODY>
+    </HTML>
+  

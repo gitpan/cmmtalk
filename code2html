@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+
+use strict;
+
+my %ents=(
+  ' ' => 'nbsp',
+  '>' => 'gt',
+  '<' => 'lt',
+  '&' => 'amp',
+);
+my $ents=join '',keys %ents;
+
+while(<>){
+  chomp;
+  s(([$ents])){ "&$ents{$1};" }geo;
+  print "<code>$_</code><BR>";
+}
+

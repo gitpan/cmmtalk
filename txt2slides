@@ -1,0 +1,88 @@
+#!/usr/bin/perl
+
+use strict;
+
+my($number,$slide,$olevel,$title);
+
+my %bullets=(
+  '.' => 'dot',
+  '+' => 'tick',
+  '-' => 'cross',
+);
+
+while(<>){
+  s/##.*//;
+  next unless /\S/;
+  chomp;
+
+  my($level,$bullet);
+  while(s/^\s*([.+-])\s*//){
+    ++$level;
+    $bullet=$1;
+  }
+
+  if(!$level){
+    &output($slide,$_ ne '');
+    $slide="<TABLE>\n";
+    $title=$_;
+    next;
+  }elsif($level>$olevel){
+    $slide.="<TABLE>\n" if $level>1;
+  }else{
+    for($level..$olevel-1){
+      $slide.="</TD></TR></TABLE>\n";
+    }
+  }
+  $slide.=qq(
+    <TR valign=top align=left>
+      <TD><IMG src="$bullets{$bullet}.gif" alt="$bullet"></TD>
+      <TD>$_
+  );
+  $olevel=$level;
+}
+&output($slide,0);
+
+sub output{
+  my($slide,$next)=@_;
+  if(!$number){
+    ++$number;
+    return;
+  }
+
+  for(0..$olevel){
+    $slide.="</TD></TR></TABLE>\n";
+  }
+
+  if($next){
+    $next=$number+1;
+    $next=qq(<A HREF="slide$next.htm">Next</A>);
+  }else{
+    $next='';
+  }
+  my $prev;
+  if($number>1){
+    $prev=$number-1;
+    $prev=qq(<A HREF="slide$prev.htm">Previous</A>);
+  }
+
+  open(OUT,"> slide$number.htm")
+    or die "Can't open slide$number.htm: $!";
+  print OUT qq(
+    <HTML>
+    <HEAD>
+    <TITLE>$title</TITLE>
+    <LINK rel="stylesheet" href="talk.css">
+    </HEAD>
+    <BODY bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#ff00ff">
+    $prev $next
+    <H2>$title</H2>
+    $slide
+    <P>$prev $next
+    </BODY>
+    </HTML>
+  );
+
+  $slide='';
+  $olevel=0;
+  ++$number;
+}
